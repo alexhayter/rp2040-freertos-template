@@ -6,12 +6,13 @@
 #include "semphr.h"
 SemaphoreHandle_t count;
 
-void LED_task()
+void LED_task(void *parameters)
 {
-   const uint LED_PIN = 25;
-   gpio_init(LED_PIN);
-   gpio_set_dir(LED_PIN,GPIO_OUT);
-   while(true){
+    (void)parameters;
+    const uint LED_PIN = 25;
+    gpio_init(LED_PIN);
+    gpio_set_dir(LED_PIN,GPIO_OUT);
+    while(true){
     if(xSemaphoreTake(count,(TickType_t) 10 ) == pdTRUE){
         gpio_put(LED_PIN,1);
         vTaskDelay(100);
@@ -21,7 +22,9 @@ void LED_task()
     }
    }
 }
-void button_task(){
+void button_task(void *parameters)
+{
+    (void)parameters;
     gpio_init(20);
     gpio_set_dir(20,GPIO_IN);
     gpio_pull_up(20);
